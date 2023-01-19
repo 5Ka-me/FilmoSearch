@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class ReviewRepository : GenericRepository<Review>, IReviewRepository
     {
-        public ReviewRepository(Context context)
+        public ReviewRepository(ApplicationContext context)
             : base(context)
         { }
     }

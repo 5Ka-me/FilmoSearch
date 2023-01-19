@@ -20,9 +20,9 @@ namespace BLL.Services
             await _actorFilmRepository.Create(actorFilm, cancellationToken);
         }
 
-        public async Task Delete(int FilmId, int ActorId, CancellationToken cancellationToken)
+        public async Task Delete(int filmId, int actorId, CancellationToken cancellationToken)
         {
-            var actorFilm = await _actorFilmRepository.Get(ActorId, FilmId, cancellationToken);
+            var actorFilm = await _actorFilmRepository.GetById(actorId, filmId, cancellationToken);
 
             await _actorFilmRepository.Delete(actorFilm, cancellationToken);
         }

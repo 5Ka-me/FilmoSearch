@@ -8,12 +8,10 @@ namespace BLL.Validators
         public ActorValidator()
         {
             RuleFor(p => p.FirstName)
-                .NotEmpty().Length(3, 20).WithMessage("{PropertyName} length error")
-                .Matches("^[A-Z]{1}[a-z]*$").WithMessage("Incorrect first name");
+                .NotEmpty();
 
             RuleFor(p => p.LastName)
-               .NotEmpty().Length(3, 20).WithMessage("{PropertyName} length error")
-               .Matches("^[A-Z]{1}[a-z]*$").WithMessage("Incorrect last name");
+               .NotEmpty();
         }
     }
 }

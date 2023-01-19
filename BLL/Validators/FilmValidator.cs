@@ -8,8 +8,7 @@ namespace BLL.Validators
         public FilmValidator()
         {
             RuleFor(p => p.Title)
-                .NotEmpty().Length(3, 20).WithMessage("{PropertyName} length error")
-                .Matches("^[a-zA-Z0-9 ]*$").WithMessage("Incorrect title");
+                .NotEmpty();
         }
     }
 }

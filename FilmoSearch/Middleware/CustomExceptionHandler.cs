@@ -7,6 +7,7 @@ namespace FilmoSearch.Middleware
     public class CustomExceptionHandler
     {
         private readonly RequestDelegate _next;
+
         public CustomExceptionHandler(RequestDelegate next)
         {
             _next = next;
@@ -39,13 +40,16 @@ namespace FilmoSearch.Middleware
                 case OperationCanceledException:
                     statusCode = (int)HttpStatusCode.InternalServerError;
                     break;
-                default:
-                    break;
             }
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
-            var result = JsonSerializer.Serialize(new ExceptionModel { StatusCode = statusCode, Message = exception.Message });
+
+            var result = JsonSerializer.Serialize(new ExceptionModel
+            {
+                StatusCode = statusCode,
+                Message = exception.Message
+            });
 
             return context.Response.WriteAsync(result);
         }

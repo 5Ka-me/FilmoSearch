@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
@@ -33,25 +34,31 @@ namespace BLL.Services
 
         public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            var actor = await _actorRepository.Get(id, cancellationToken);
+            var actor = await _actorRepository.GetById(id, cancellationToken);
 
-            CheckNull(actor);
+            if (actor == null)
+            {
+                throw new EntityNotFoundException("Entity actor not found");
+            }
 
             await _actorRepository.Delete(actor, cancellationToken);
         }
 
-        public async Task<IEnumerable<ActorModel>> Get(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ActorModel>> GetAll(CancellationToken cancellationToken)
         {
-            var actor = await _actorRepository.Get(cancellationToken);
+            var actor = await _actorRepository.GetAll(cancellationToken);
 
             return _mapper.Map<IEnumerable<ActorModel>>(actor);
         }
 
-        public async Task<ActorModel> Get(int id, CancellationToken cancellationToken)
+        public async Task<ActorModel> GetById(int id, CancellationToken cancellationToken)
         {
-            var actor = await _actorRepository.Get(id, cancellationToken);
+            var actor = await _actorRepository.GetById(id, cancellationToken);
 
-            CheckNull(actor);
+            if (actor == null)
+            {
+                throw new EntityNotFoundException("Entity actor not found");
+            }
 
             return _mapper.Map<ActorModel>(actor);
         }
@@ -60,23 +67,18 @@ namespace BLL.Services
         {
             await _validator.ValidateAndThrowAsync(actorModel, cancellationToken);
 
-            var actor = await _actorRepository.Get(actorModel.Id, cancellationToken);
+            var actor = await _actorRepository.GetById(actorModel.Id, cancellationToken);
 
-            CheckNull(actor);
+            if (actor == null)
+            {
+                throw new EntityNotFoundException("Entity actor not found");
+            }
 
             _mapper.Map(actorModel, actor);
 
             await _actorRepository.Update(actor, cancellationToken);
 
             return actorModel;
-        }
-
-        private void CheckNull(Actor? actor)
-        {
-            if (actor == null)
-            {
-                throw new ArgumentNullException(nameof(actor), "Actor does not exist");
-            }
         }
     }
 }

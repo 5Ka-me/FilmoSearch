@@ -10,7 +10,7 @@ namespace DAL.IoC
     {
         public static IServiceCollection AddContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<Context>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             return services;
         }

@@ -9,42 +9,50 @@ namespace FilmoSearch.Controllers
     public class FilmController : ControllerBase
     {
         private readonly IFilmService _filmService;
-        //ILogger<FilmController> _logger;
 
         public FilmController(IFilmService filmService)
         {
             _filmService = filmService;
-            //_logger = logger;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<FilmModel>> Get(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            return await _filmService.Get(cancellationToken);
+            var result = await _filmService.GetAll(cancellationToken);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<FilmModel> Get(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
         {
-            return await _filmService.Get(id, cancellationToken);
+            var result = await _filmService.GetById(id, cancellationToken);
+
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<FilmModel> Create(FilmModel filmModel, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(FilmModel filmModel, CancellationToken cancellationToken)
         {
-            return await _filmService.Create(filmModel, cancellationToken);
+            var result = await _filmService.Create(filmModel, cancellationToken);
+
+            return Created("", result);
         }
 
         [HttpPut]
-        public async Task<FilmModel> Update(FilmModel filmModel, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(FilmModel filmModel, CancellationToken cancellationToken)
         {
-            return await _filmService.Update(filmModel, cancellationToken);
+            var result = await _filmService.Update(filmModel, cancellationToken);
+
+            return Accepted(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             await _filmService.Delete(id, cancellationToken);
+
+            return NoContent();
         }
     }
 }

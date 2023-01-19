@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
@@ -33,25 +34,31 @@ namespace BLL.Services
 
         public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            var review = await _reviewRepository.Get(id, cancellationToken);
+            var review = await _reviewRepository.GetById(id, cancellationToken);
 
-            CheckNull(review);
+            if (review == null)
+            {
+                throw new EntityNotFoundException("Entity review not found");
+            }
 
             await _reviewRepository.Delete(review, cancellationToken);
         }
 
-        public async Task<IEnumerable<ReviewModel>> Get(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ReviewModel>> GetAll(CancellationToken cancellationToken)
         {
-            var review = await _reviewRepository.Get(cancellationToken);
+            var review = await _reviewRepository.GetAll(cancellationToken);
 
             return _mapper.Map<IEnumerable<ReviewModel>>(review);
         }
 
-        public async Task<ReviewModel> Get(int id, CancellationToken cancellationToken)
+        public async Task<ReviewModel> GetById(int id, CancellationToken cancellationToken)
         {
-            var review = await _reviewRepository.Get(id, cancellationToken);
+            var review = await _reviewRepository.GetById(id, cancellationToken);
 
-            CheckNull(review);
+            if (review == null)
+            {
+                throw new EntityNotFoundException("Entity review not found");
+            }
 
             return _mapper.Map<ReviewModel>(review);
         }
@@ -60,22 +67,18 @@ namespace BLL.Services
         {
             await _validator.ValidateAndThrowAsync(reviewModel, cancellationToken);
 
-            var review = await _reviewRepository.Get(reviewModel.Id, cancellationToken);
+            var review = await _reviewRepository.GetById(reviewModel.Id, cancellationToken);
 
-            CheckNull(review);
+            if (review == null)
+            {
+                throw new EntityNotFoundException("Entity review not found");
+            }
 
             _mapper.Map(reviewModel, review);
 
             await _reviewRepository.Update(review, cancellationToken);
 
             return reviewModel;
-        }
-        private void CheckNull(Review review)
-        {
-            if (review == null)
-            {
-                throw new ArgumentNullException(nameof(review), "Review does not exist");
-            }
         }
     }
 }

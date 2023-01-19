@@ -5,21 +5,21 @@ namespace DAL.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected Context _context;
+        protected ApplicationContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(Context context)
+        public GenericRepository(ApplicationContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> Get(CancellationToken cancellationToken)
+        public async Task<IEnumerable<T>> GetAll(CancellationToken cancellationToken)
         {
             return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<T> Get(int id, CancellationToken cancellationToken)
+        public async Task<T> GetById(int id, CancellationToken cancellationToken)
         {
             return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }

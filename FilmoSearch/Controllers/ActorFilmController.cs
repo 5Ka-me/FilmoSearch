@@ -7,13 +7,11 @@ namespace FilmoSearch.Controllers
     [ApiController]
     public class ActorFilmController : ControllerBase
     {
-        //private readonly ILogger<ActorController> _logger;
         private readonly IActorFilmService _actorFilmService;
 
         public ActorFilmController(IActorFilmService actorFilmService)
         {
             _actorFilmService = actorFilmService;
-            //_logger = logger;
         }
 
         [HttpPost("films/{filmId}/actors/{actorId}")]
@@ -23,9 +21,11 @@ namespace FilmoSearch.Controllers
         }
 
         [HttpDelete("films/{filmId}/actors/{actorId}")]
-        public async Task Delete(int filmId, int actorId, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int filmId, int actorId, CancellationToken cancellationToken)
         {
             await _actorFilmService.Delete(filmId, actorId, cancellationToken);
+
+            return NoContent();
         }
     }
 }

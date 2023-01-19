@@ -8,8 +8,8 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .ReadFrom.Services(services));
 
-builder.Services.AddApplications(builder.Configuration);
-builder.Services.AddBusiness();
+builder.Services.AddApplications(builder.Configuration)
+    .AddBusiness();
 
 builder.Services.AddControllers();
 

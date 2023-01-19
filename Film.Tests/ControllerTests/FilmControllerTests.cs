@@ -1,6 +1,7 @@
 using BLL.Interfaces;
 using BLL.Models;
 using FilmoSearch.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -12,24 +13,25 @@ namespace Films.Tests.ControllerTests
         private readonly Mock<CancellationTokenSource> _cancellationTokenSource = new();
 
         [Fact]
-        public void GetAllFilms()
+        public async void GetAllFilms()
         {
             //Arrange
-            _service.Setup(x => x.Get(_cancellationTokenSource.Object.Token).Result).Returns(GetListOfFilms());
+            var listOfFilms = GetListOfFilms();
+            _service.Setup(x => x.GetAll(_cancellationTokenSource.Object.Token).Result).Returns(listOfFilms);
 
             var controller = new FilmController(_service.Object);
-            const int expected = 4;
 
             //Act
-            var result = controller.Get(_cancellationTokenSource.Object.Token).Result;
+            var result = await controller.GetAll(_cancellationTokenSource.Object.Token);
+            var okResult = result as OkObjectResult;
 
-            //Assert
-            Assert.NotEmpty(result);
-            Assert.Equal(expected, result.Count());
+            // assert
+            Assert.NotNull(okResult);
+            Assert.Equal(200, okResult.StatusCode);
         }
 
         [Fact]
-        public void DeleteFilm()
+        public async void DeleteFilm()
         {
             //Arrange
             _service.Setup(x => x.Delete(3, _cancellationTokenSource.Object.Token));
@@ -37,14 +39,16 @@ namespace Films.Tests.ControllerTests
             var controller = new FilmController(_service.Object);
 
             //Act
-            controller.Delete(3, _cancellationTokenSource.Object.Token);
+            var result = await controller.Delete(3, _cancellationTokenSource.Object.Token);
+            var noContentResult = result as NoContentResult;
 
             //Assert
-            _service.Verify(x => x.Delete(3, _cancellationTokenSource.Object.Token), Times.Exactly(1));
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
         }
 
         [Fact]
-        public void CreateFilm()
+        public async void CreateFilm()
         {
             //Arrange
             var model = GetModel();
@@ -54,30 +58,32 @@ namespace Films.Tests.ControllerTests
             var controller = new FilmController(_service.Object);
 
             //Act
-            var result = controller.Create(model, _cancellationTokenSource.Object.Token).Result;
+            var result = await controller.Create(model, _cancellationTokenSource.Object.Token);
+            var createdResult = result as CreatedResult;
 
             //Assert
-            Assert.NotNull(result);
-            Assert.True(model.Equals(result));
+            Assert.NotNull(createdResult);
+            Assert.Equal(201, createdResult.StatusCode);
         }
 
         [Fact]
-        public void GetFilm()
+        public async void GetFilm()
         {
             //Arrange
             var model = GetModel();
             const int idSample = 3;
 
-            _service.Setup(x => x.Get(idSample, _cancellationTokenSource.Object.Token).Result).Returns(model);
+            _service.Setup(x => x.GetById(idSample, _cancellationTokenSource.Object.Token).Result).Returns(model);
 
             var controller = new FilmController(_service.Object);
 
             //Act
-            var result = controller.Get(idSample, _cancellationTokenSource.Object.Token).Result;
+            var result = await controller.GetById(idSample, _cancellationTokenSource.Object.Token);
+            var okResult = result as OkObjectResult;
 
             //Assert
-            Assert.NotNull(result);
-            Assert.True(model.Equals(result));
+            Assert.NotNull(okResult);
+            Assert.Equal(200, okResult.StatusCode);
         }
 
         private static IEnumerable<FilmModel> GetListOfFilms()

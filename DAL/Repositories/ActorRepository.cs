@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class ActorRepository : GenericRepository<Actor>, IActorRepository
     {
-        public ActorRepository(Context context)
+        public ActorRepository(ApplicationContext context)
             : base(context)
         { }
     }

@@ -10,21 +10,16 @@ namespace BLL.IoC
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddValidators(this IServiceCollection services)
+        public static IServiceCollection AddUtility(this IServiceCollection services)
         {
             services.AddScoped<IValidator<ActorModel>, ActorValidator>();
             services.AddScoped<IValidator<FilmModel>, FilmValidator>();
             services.AddScoped<IValidator<ReviewModel>, ReviewValidator>();
 
-            return services;
-        }
-        public static IServiceCollection AddMapper(this IServiceCollection services)
-        {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             return services;
         }
-
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {

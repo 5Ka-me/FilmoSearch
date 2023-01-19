@@ -5,7 +5,7 @@ namespace DAL.Repositories
 {
     public class FilmRepository : GenericRepository<Film>, IFilmRepository
     {
-        public FilmRepository(Context context)
+        public FilmRepository(ApplicationContext context)
             : base(context)
         { }
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Exceptions;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
@@ -33,25 +34,31 @@ namespace BLL.Services
 
         public async Task Delete(int id, CancellationToken cancellationToken)
         {
-            var film = await _filmRepository.Get(id, cancellationToken);
+            var film = await _filmRepository.GetById(id, cancellationToken);
 
-            CheckNull(film);
+            if (film == null)
+            {
+                throw new EntityNotFoundException("Entity film not found");
+            }
 
             await _filmRepository.Delete(film, cancellationToken);
         }
 
-        public async Task<IEnumerable<FilmModel>> Get(CancellationToken cancellationToken)
+        public async Task<IEnumerable<FilmModel>> GetAll(CancellationToken cancellationToken)
         {
-            var films = await _filmRepository.Get(cancellationToken);
+            var films = await _filmRepository.GetAll(cancellationToken);
 
             return _mapper.Map<IEnumerable<FilmModel>>(films);
         }
 
-        public async Task<FilmModel> Get(int id, CancellationToken cancellationToken)
+        public async Task<FilmModel> GetById(int id, CancellationToken cancellationToken)
         {
-            var film = await _filmRepository.Get(id, cancellationToken);
+            var film = await _filmRepository.GetById(id, cancellationToken);
 
-            CheckNull(film);
+            if (film == null)
+            {
+                throw new EntityNotFoundException("Entity film not found");
+            }
 
             return _mapper.Map<FilmModel>(film);
         }
@@ -60,23 +67,18 @@ namespace BLL.Services
         {
             await _validator.ValidateAndThrowAsync(filmModel, cancellationToken);
 
-            var film = await _filmRepository.Get(filmModel.Id, cancellationToken);
+            var film = await _filmRepository.GetById(filmModel.Id, cancellationToken);
 
-            CheckNull(film);
+            if (film == null)
+            {
+                throw new EntityNotFoundException("Entity film not found");
+            }
 
             _mapper.Map(filmModel, film);
 
             await _filmRepository.Update(film, cancellationToken);
 
             return filmModel;
-        }
-
-        private void CheckNull(Film? film)
-        {
-            if (film == null)
-            {
-                throw new ArgumentNullException(nameof(film), "Film does not exist");
-            }
         }
     }
 }
