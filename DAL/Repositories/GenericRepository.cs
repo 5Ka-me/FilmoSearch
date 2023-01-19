@@ -1,11 +1,12 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Entities;
+using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        protected ApplicationContext _context;
+        private readonly ApplicationContext _context;
         private readonly DbSet<T> _dbSet;
 
         public GenericRepository(ApplicationContext context)
@@ -19,7 +20,7 @@ namespace DAL.Repositories
             return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<T> GetById(int id, CancellationToken cancellationToken)
+        public async Task<T?> GetById(int id, CancellationToken cancellationToken)
         {
             return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }

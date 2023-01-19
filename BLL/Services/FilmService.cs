@@ -38,7 +38,7 @@ namespace BLL.Services
 
             if (film == null)
             {
-                throw new EntityNotFoundException("Entity film not found");
+                throw new EntityNotFoundException($"Film with Id: {id} not found");
             }
 
             await _filmRepository.Delete(film, cancellationToken);
@@ -57,7 +57,7 @@ namespace BLL.Services
 
             if (film == null)
             {
-                throw new EntityNotFoundException("Entity film not found");
+                throw new EntityNotFoundException($"Film with Id: {id} not found");
             }
 
             return _mapper.Map<FilmModel>(film);
@@ -71,7 +71,7 @@ namespace BLL.Services
 
             if (film == null)
             {
-                throw new EntityNotFoundException("Entity film not found");
+                throw new EntityNotFoundException($"Film with Id: {filmModel.Id} not found");
             }
 
             _mapper.Map(filmModel, film);

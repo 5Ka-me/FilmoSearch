@@ -38,7 +38,7 @@ namespace BLL.Services
 
             if (actor == null)
             {
-                throw new EntityNotFoundException("Entity actor not found");
+                throw new EntityNotFoundException($"Actor with Id: {id} not found");
             }
 
             await _actorRepository.Delete(actor, cancellationToken);
@@ -57,7 +57,7 @@ namespace BLL.Services
 
             if (actor == null)
             {
-                throw new EntityNotFoundException("Entity actor not found");
+                throw new EntityNotFoundException($"Actor with Id: {id} not found");
             }
 
             return _mapper.Map<ActorModel>(actor);
@@ -71,7 +71,7 @@ namespace BLL.Services
 
             if (actor == null)
             {
-                throw new EntityNotFoundException("Entity actor not found");
+                throw new EntityNotFoundException($"Actor with Id: {actorModel.Id} not found");
             }
 
             _mapper.Map(actorModel, actor);

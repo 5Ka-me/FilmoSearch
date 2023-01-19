@@ -10,12 +10,17 @@ namespace DAL.IoC
     {
         public static IServiceCollection AddContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddRepositories();
 
             return services;
         }
 
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IActorRepository, ActorRepository>();
             services.AddScoped<IFilmRepository, FilmRepository>();

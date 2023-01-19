@@ -1,5 +1,4 @@
-﻿using BLL.IoC;
-using DAL.IoC;
+﻿using DAL.IoC;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,16 +8,14 @@ namespace DI
     {
         public static IServiceCollection AddApplications(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddContext(configuration)
-                .AddRepositories();
+            services.AddContext(configuration);
 
             return services;
         }
 
-        public static IServiceCollection AddBusiness(this IServiceCollection services)
+        public static IServiceCollection AddBusinesslogic(this IServiceCollection services)
         {
-            services.AddUtility()
-                .AddServices();
+            BLL.IoC.ServiceExtensions.AddBusiness(services);
 
             return services;
         }

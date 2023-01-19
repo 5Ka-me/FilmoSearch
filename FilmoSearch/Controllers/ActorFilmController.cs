@@ -15,9 +15,11 @@ namespace FilmoSearch.Controllers
         }
 
         [HttpPost("films/{filmId}/actors/{actorId}")]
-        public async Task Create(int filmId, int actorId, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(int filmId, int actorId, CancellationToken cancellationToken)
         {
             await _actorFilmService.Create(filmId, actorId, cancellationToken);
+
+            return Ok();
         }
 
         [HttpDelete("films/{filmId}/actors/{actorId}")]

@@ -6,7 +6,7 @@ namespace DAL.Repositories
 {
     public class ActorFilmRepository : IActorFilmRepository
     {
-        protected ApplicationContext _context;
+        private readonly ApplicationContext _context;
         private readonly DbSet<ActorFilm> _dbSet;
 
         public ActorFilmRepository(ApplicationContext context)
@@ -29,7 +29,7 @@ namespace DAL.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<ActorFilm> GetById(int actorId, int filmId, CancellationToken cancellationToken)
+        public async Task<ActorFilm?> GetById(int actorId, int filmId, CancellationToken cancellationToken)
         {
             return await _dbSet.FindAsync(new object[] { actorId, filmId }, cancellationToken);
         }

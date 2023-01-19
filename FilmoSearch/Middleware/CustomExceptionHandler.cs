@@ -1,4 +1,5 @@
-﻿using FilmoSearch.Models;
+﻿using BLL.Exceptions;
+using FilmoSearch.Models;
 using System.Net;
 using System.Text.Json;
 
@@ -32,6 +33,7 @@ namespace FilmoSearch.Middleware
             switch (exception)
             {
                 case ArgumentNullException:
+                case EntityNotFoundException:
                     statusCode = (int)HttpStatusCode.NotFound;
                     break;
                 case ArgumentException:
@@ -39,6 +41,9 @@ namespace FilmoSearch.Middleware
                     break;
                 case OperationCanceledException:
                     statusCode = (int)HttpStatusCode.InternalServerError;
+                    break;
+                case EntityAlreadyExistException:
+                    statusCode = (int)HttpStatusCode.PreconditionFailed;
                     break;
             }
 

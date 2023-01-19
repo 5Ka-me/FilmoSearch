@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
 using FilmoSearch.Controllers;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -23,11 +24,10 @@ namespace Films.Tests.ControllerTests
 
             //Act
             var result = await controller.GetAll(_cancellationTokenSource.Object.Token);
-            var okResult = result as OkObjectResult;
 
             // assert
-            Assert.NotNull(okResult);
-            Assert.Equal(200, okResult.StatusCode);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         [Fact]
@@ -40,11 +40,10 @@ namespace Films.Tests.ControllerTests
 
             //Act
             var result = await controller.Delete(3, _cancellationTokenSource.Object.Token);
-            var noContentResult = result as NoContentResult;
 
             //Assert
-            Assert.NotNull(noContentResult);
-            Assert.Equal(204, noContentResult.StatusCode);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(NoContentResult));
         }
 
         [Fact]
@@ -59,11 +58,10 @@ namespace Films.Tests.ControllerTests
 
             //Act
             var result = await controller.Create(model, _cancellationTokenSource.Object.Token);
-            var createdResult = result as CreatedResult;
 
             //Assert
-            Assert.NotNull(createdResult);
-            Assert.Equal(201, createdResult.StatusCode);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(CreatedResult));
         }
 
         [Fact]
@@ -79,11 +77,10 @@ namespace Films.Tests.ControllerTests
 
             //Act
             var result = await controller.GetById(idSample, _cancellationTokenSource.Object.Token);
-            var okResult = result as OkObjectResult;
 
             //Assert
-            Assert.NotNull(okResult);
-            Assert.Equal(200, okResult.StatusCode);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(OkObjectResult));
         }
 
         private static IEnumerable<ActorModel> GetListOfActors()

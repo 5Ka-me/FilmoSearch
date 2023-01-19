@@ -38,7 +38,7 @@ namespace BLL.Services
 
             if (review == null)
             {
-                throw new EntityNotFoundException("Entity review not found");
+                throw new EntityNotFoundException($"Review with Id: {id} not found");
             }
 
             await _reviewRepository.Delete(review, cancellationToken);
